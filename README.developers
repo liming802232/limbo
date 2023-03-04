@@ -1,87 +1,86 @@
-Limbo Emulator (QEMU) for Android
-
+Android Limbo模拟器（QEMU）
 ================================================================================
 
-1. What is Limbo?
+1. 什么是 Limbo?
 
-Limbo is a QEMU-based emulator for Android. It currently supports PC emulation 
-for Intel x86 architecture.
-For more information, instructions, guides, known issues, and downloads visit:
+Limbo 是一个基于 QEMU 的安卓模拟器。 目前支持PC仿真
+ 适用于 Intel x86 架构。
+有关详细信息、说明、指南、已知问题和下载，请访问：
 https://github.com/limboemu/limbo
 
 ===============================================================================
 
-2. Requirements:
+2. 要求:
 
-    Android SDK
-    Android NDK: r14b/gcc or r23b/clang
-    Android Studio (3.1.1 preferred)
-    Android device with Android OS 8.0 (Oreo) and above
-    Linux Desktop pc (Ubuntu preferred)
-    Make sure you have the following packages installed, if not run:
+    Android SDK 安卓开发工具包
+    Android NDK: r14b/gcc 或者 r23b/clang
+    Android Studio (首选3.1.1版本)
+    Android 设备 需要搭配 Android OS 8.0 (Oreo) 以及以上版本的系统
+    Linux 台式电脑 (首选 Ubuntu)
+    如果没有运行，请确保安装了以下软件包：
     sudo apt-get install make autoconf automake git python binutils 
     sudo apt-get install libtool-bin pkg-config flex bison gettext texinfo rsync
-    For development you can use your own editors Geany is highly
-	recommended for editing the native code
+    对于开发，您可以使用自己的编辑器 Geany（Ubuntu最好文本编辑器）
+	建议用于编辑（native code）本机代码
 
 ===============================================================================
 
-3. Known Issues:
+3. 已知问题：
     https://github.com/limboemu/limbo/issues
 
 ===============================================================================
 
-4. Update Configuration
+4. 更新配置
 
-    If you build the supported QEMU version then the only thing you need to do is edit file:
+    如果您构建了支持的QEMU版本，那么您唯一需要做的就是编辑文件：
     limbo-android-lib/src/main/jni/android-limbo-config.mak
-    In all other cases you have to look at the config files under:
+    在所有其他情况下，您必须查看以下目录下的配置文件：
     limbo-android-lib/src/main/jni/android-config/
     
-    For more information see the Building section.
+    有关详细信息，请参阅构建部分。
     	
 
-5. Get and Compile external libraries
+5. 获取和编译外部库
 
-    #Make sure you're under the jni directory
+    #确保你在jni目录下
     cd ./limbo-android-lib/src/main/jni
     
-    # Now download the source code for the external libraries and unzip them under the jni directory
-    #Note: if some of these file links don't download with wget use your browser to download them
+    # 现在下载外部库的源代码并将其解压缩到jni目录下
+    #注意：如果这些文件链接中的一些不能用wget下载，请使用浏览器下载它们
 
-    ##### Get QEMU
-    # download link:  http://download.qemu-project.org/qemu-x.x.x.tar.xz 
-    # Current versions supported by limbo: 5.1.0 and 2.9.1
-    # example for version 5.1.0:
+    ##### 获取 QEMU
+    # 下载链接： http://download.qemu-project.org/qemu-x.x.x.tar.xz 
+    # limbo支持的当前版本： 5.1.0 和 2.9.1
+    # QEMU 5.1.0 版本的示例：
     wget http://download.qemu-project.org/qemu-5.1.0.tar.xz -P /tmp/
     tar -xJf /tmp/qemu-5.1.0.tar.xz
     mv qemu-5.1.0 qemu
-    # For QEMU version 2.9.1:
+    # QEMU 2.9.1 版本的示例：
     wget http://download.qemu-project.org/qemu-2.9.1.tar.xz -P /tmp/
     tar -xJf /tmp/qemu-2.9.1.tar.xz
     mv qemu-2.9.1 qemu
 
-    ##### GET glib
+    ##### 获取 glib
     wget https://ftp.gnome.org/pub/GNOME/sources/glib/2.56/glib-2.56.1.tar.xz -P /tmp/
     tar -xJf /tmp/glib-2.56.1.tar.xz
     mv glib-2.56.1 glib
 
-    ##### GET libffi
+    ##### 获取 libffi
     wget https://sourceware.org/pub/libffi/libffi-3.3.tar.gz -P /tmp/
     tar -xzf /tmp/libffi-3.3.tar.gz
     mv libffi-3.3 libffi
 
-    ##### GET pixman
+    ##### 获取 pixman
     wget https://www.cairographics.org/releases/pixman-0.40.0.tar.gz -P /tmp/
     tar -xzf /tmp/pixman-0.40.0.tar.gz
     mv pixman-0.40.0 pixman
 
-    ##### GET SDL2
+    ##### 获取 SDL2
     wget https://www.libsdl.org/release/SDL2-2.0.8.tar.gz -P /tmp/
     tar -xzf /tmp/SDL2-2.0.8.tar.gz
     mv SDL2-2.0.8 SDL2
 
-    Now you should have this directory structure:
+    现在，您应该拥有以下目录结构：
     jni/
         android-config/
         compat/
@@ -95,115 +94,115 @@ https://github.com/limboemu/limbo
 
 ===============================================================================
 
-6. Apply patches
+6. 应用路径
 
-    ### Apply patch for QEMU:
-    # example for 5.1.0:
+    ### QEMU 的应用路径：
+    # QEMU 5.1.0 示例：
     cd ./limbo-android-lib/src/main/jni/qemu/
     patch -p1 < ../patches/qemu-5.1.0.patch
-    # for 2.9.1:
+    # QEMU 2.9.1 示例：
     patch -p1 < ../patches/qemu-2.9.1.patch
 
-    ### Apply glib patch for Limbo:
+    ### Limbo glib 库的应用路径：
     cd ./limbo-android-lib/src/main/jni/glib/
     patch -p1 < ../patches/glib-2.56.1.patch
 
-    ### Apply SDL2 patch for Limbo:
+    ### Limbo SDL2 库的应用路径：
     cd ./limbo-android-lib/src/main/jni/SDL2/
     patch -p1 < ../patches/sdl2-2.0.8.patch
 
-    ### Other QEMU versions:
-    # If you want to redistribute Limbo build with other QEMU versions, create your own patch like this:
+    ### QEMU 其他版本:
+    # 如果你想用其他QEMU版本重新发布 Limbo 构建，创建你自己的补丁如下：
     cd /limbo-android-lib/src/main/jni/qemu/
     diff -ru --no-dereference /tmp/qemu-x.x.x . | grep -v '^Only in' > ../patches/qemu-x.x.x.patch
-    Don't forget to create your android-qemu-config-x.x.x.mak file
-      and include it in android-qemu-config.mak
+    不要忘记创建您的 android-qemu-config-x.x.x.mak 文件
+      并将其包含在 android-qemu-config.mak 中
 
 ===============================================================================
 
 7. Build
 
-    a. To build the native part of the app make sure you're under the jni directory:
+    a. 要构建应用的原生部分，请确保您位于jni目录下：
         cd limbo-android-lib/src/main/jni
         
-    Make sure you update file android-limbo-config.mak with the NDK folder to your installation folder
-    keep in mind the last NDK version  that supported gcc was r14b. The alternative is to use clang 
-    with ndk version r23. For example: 
+    请确保将带有NDK文件夹的android-limbo-config.mak文件更新到安装文件夹
+    请记住，支持gcc的最后一个NDK版本是r14b。 替代方法是使用clang 
+    具有NDK版本R23。 例如： 
     NDK_ROOT = /home/dev/tools/ndk/android-ndk-r14b
 
-    The rest of the configuration is for specifying the right QEMU version: USE_QEMU_VERSION
-    the host architecture (android device): BUILD_HOST
-    and the emulator guest architecture: BUILD_GUEST
+    配置的其余部分用于指定正确的QEMU版本：USE_QEMU_VERSION
+    主机架构（安卓设备）： BUILD_HOST
+    以及模拟器来宾架构：BUILD_GUEST
     
-    b. From Android Studio import BOTH the Android library limbo-android-lib AND the module for the guest
-        architecture you need (x86,arm,ppc,sparc) ie limbo-android-x86.
+    b. 从Android Studio导入Android库limbo-android-lib和来宾的模块
+        你需要的架构（x86，arm，ppc，sparc）即limbo-android-x86。
         
-    c. Build the native libraries:
-        # Make sure you're still under the jni directory:
+    c. 
+        # 确保您仍然在jni目录下：
         cd limbo-android-lib/src/main/jni
 
-        # Instead of editing android-limbo-config.mak you can also supply the variables on the command line.
-        # For example:
+        # 除了编辑android-limbo-config. mak，您还可以在命令行中提供变量。
+        # 例如：
             export BUILD_HOST=<EABI>
             export BUILD_GUEST=<GUEST_ARCH>
             export NDK_DEBUG=<ENABLE_DEBUG>
 
-        where:
-            EABI is the Android device type (host arch): armeabi-v7a, arm64-v8a, x86, x86_64
-            GUEST_ARCH is the Emulator type: x86_64-softmmu,aarch64-softmmu,sparc64-softmmu,ppc64-softmmu
-            ENABLE_DEBUG is 1 (optional)
+        其中：
+            EABI是Android设备类型（主机架构）： armeabi-v7a, arm64-v8a, x86, x86_64
+            GUEST_ARCH 是模拟器类型： x86_64-softmmu,aarch64-softmmu,sparc64-softmmu,ppc64-softmmu
+            ENABLE_DEBUG 为1（可选）
 
-        # To start the build type on your terminal:
+        # 要在terminal终端上启动构建类型：
             make limbo
             
-        Notes:
-        If you want to remove ALL previously compiled native objects and libraries:
+        注意：
+        如果要删除所有以前编译的本机对象和库：
         make clean
 
-        If you're building apk for multiple host architectures you need to do in between builds:
+        如果你正在为多个主机架构构建apk，你需要在构建之间做：
         make distclean
 
-        If you're building apk for multiple guest architectures you can specify them with commas:
+        如果您正在为多个来宾架构构建APK，您可以使用逗号指定它们：
         BUILD_GUEST=x86_64-softmmu,aarch64-softmmu
 
-        Examples:
-        1) To build Limbo x86 Emulator for ARM64 phones type:
+        示例：
+        1) 要为ARM64手机构建Limbo x86仿真器，请键入以下内容：
             export BUILD_HOST=arm64-v8a
             export BUILD_GUEST=x86_64-softmmu
             make limbo
 
-        2) To build Limbo x86 Emulator for ARM phones type:
+        2) 要为ARM手机构建Limbo x86仿真器，请键入：
             export BUILD_HOST=armeabi-v7a
             export BUILD_GUEST=x86_64-softmmu
             make limbo
 
-        3) To build Limbo ARM Emulator for ARM64 phones type:
+        3) 要为ARM64手机构建Limbo ARM仿真器，请键入：
             export BUILD_HOST=arm64-v8a
             export BUILD_GUEST=aarch64-softmmu
             make limbo
 
-        4) To build Limbo x86 Emulator for Intel x86 32bit phones/tablets/PCs type:
+        4) 要为Intel x86 32位手机/平板电脑/PC构建Limbo x86仿真器，请键入：
             export BUILD_HOST=x86
             export BUILD_GUEST=x86_64-softmmu
             make limbo
 
-        5) To build Limbo x86 Emulator for Intel x86 64bit PCs type:
+        5) 要为Intel x86 64位PC构建Limbo x86仿真器，请键入以下内容：
             export BUILD_HOST=x86_64
             export BUILD_GUEST=x86_64-softmmu
             make limbo
 
-        6) To build Limbo ARM Emulator for ARM64 phones for debugging type:
+        6) 要构建用于ARM64电话的Limbo ARM仿真器以进行调试，请键入以下内容：
             export NDK_DEBUG=1
             export BUILD_HOST=arm64-v8a
             export BUILD_GUEST=aarch64-softmmu
             make limbo
 
-        7) To build multiple Limbo emulators for ARM phones type:
+        7) 要为ARM手机构建多个Limbo模拟器，请键入：
             export BUILD_HOST=arm64-v8a
             export BUILD_GUEST=x86_64-softmmu,aarch64-softmmu
             make limbo
 
-		8) To build limbo for older devices with gcc set the following options:
+		8) 使用gcc为旧设备构建limbo，请设置以下选项：
 			export NDK_ROOT=/home/dev/tools/ndk/android-ndk-r14b
 			export USE_GCC=true
 			export BUILD_HOST=armeabi-v7a
@@ -211,9 +210,9 @@ https://github.com/limboemu/limbo
 			export USE_QEMU_VERSION=2.9.1
 			export USE_AAUDIO=false
 
-		For more options see android-limbo-config.mak
+		更多选项请参见 android-limbo-config.mak
 		
-       You should now have the following libraries in these 2 folders:
+       现在，这两个文件夹中应该有以下库：
 
        limbo-android-lib/src/main/jniLibs/<EABI>/
          libcompat-iconv.so
@@ -228,116 +227,114 @@ https://github.com/limboemu/limbo
        limbo-android-<GUEST_ARCH>/src/main/jniLibs/<EABI>/
          libqemu-system-xxx.so
 
-        Note:
-            When you build the apk in Android Studio it will contain the libraries from both
-            folders so you don't need to copy files manually.
+        注意：
+            当您在Android Studio中构建apk时，它将包含来自以下两个方面的库
+            文件夹，因此您无需手动复制文件。
 
-    d. Build the Android apk for the corresponding guest using Android Studio.
-        Make sure the *.so libraries are zipped in the final .apk
+    d. 使用Android Studio为相应的来宾构建Android apk。
+        确保 *. so库压缩到最终的. apk中
         
-    e. To build from the command line instead of Android Studio:
-        export ANDROID_SDK_ROOT=~/Android/Sdk
+    e. 要从命令行而非Android Studio构建：
+        导出 ANDROID_SDK_ROOT=~/Android/Sdk
     	gradle wrapper
     	./gradlew assembleRelease
 
-    f. If you want to build the debugging version:
+    f. 如果要生成调试版本：
         Set variables in Config.java:
           debug = true;
-        Modify android-config/android-limbo-config.mak and point to a configuration
-          with no optimization:
+        修改 android-config/android-limbo-config.mak 并指向一个配置
+          是否优化：
         USE_OPTIMIZATION=false
 
-        Follow the steps to build the native libraries as described above
-        export NDK_DEBUG=1
+        按照上述步骤构建本机库
+        导出 NDK_DEBUG=1
 
-        Important:
-           From Android studio click Build> Rebuild Project and Run > Debug
+        重要提示：
+           在Android studio中，单击 Build> Rebuild Project and Run > Debug
 
 ===============================================================================
 
-8. Debugging
-        To debug the native code for a particular guest:
+8. 调试
+        要调试特定的来宾的本地代码：
 
-        # for x86 guest and ARM64 phone:
+        # x86来宾和ARM64手机：
         export BUILD_HOST=arm64-v8a
         export BUILD_GUEST=x86_64-softmmu
         make ndk-gdb PKG_NAME=com.limbo.emu.main
 
-        # for other guests use respectively:
+        # 供其他客人分别使用：
         make ndk-gdb PKG_NAME=com.limbo.emu.main.arm
 		make ndk-gdb PKG_NAME=com.limbo.emu.main.sparc
 		make ndk-gdb PKG_NAME=com.limbo.emu.main.ppc
 
-        Note: you might want to disable signal handling in gdb:
-        handle all nostop noprint
+        注意：您可能希望在gdb中禁用信号处理：
+        处理所有不停止不打印
 
-        To catch a SIGSEGV:
+        要捕获 SIGSEGV：
         handle 11 stop print
 
-        Useful commands:
-        To set breakpoints:       b <file.c>:<code_line>
-        To step statement:        s
-        To go to next statement:  n
-        To continue:              c
-        To halt(interrupt):       ctrl-c
-        To see stack (backtrace): bt
+        有用的命令：
+        设置断点：        b <file.c>:<code_line>
+        步骤语句：        s
+        转到下一语句：     n
+        继续：            c
+        暂停（中断）：      ctrl-c
+        要查看堆栈（回溯）： bt
 
 ===============================================================================
 
-9. Development Notes
+9. 发展说明
 
-    a. Codes Changes for Android compatibility are in patch files marked with __ANDROID__
+    a. Android兼容性的代码变更在标记为__ANDROID__的路径文件中
 
-    b. Similarly for LIMBO functionality code changes are tagged with __LIMBO__
+    b. 同样，对于LIBO功能，代码变更标记为__LIBO__
 
-    c. Important Configuration files (You'll need to update this with the NDK path before compiling):
+    c. 重要配置文件（您需要在编译前使用NDK路径更新此文件）：
         limbo-android-lib/src/main/jni/android-config/android-limbo-config.mak
 
-    d. Advanced QEMU config files:
+    d. 高级QEMU配置文件：
         limbo-android-lib/src/main/jni/android-config/android-qemu-config.mak
 
-    d. Advanced Device Configuration files:
+    d. 高级设备配置文件：
         limbo-android-lib/src/main/jni/android-config/android-config/*.mak
 
-    e. Important Makefiles:
+    e. 重要生成文件：
         limbo-android-lib/src/main/jni/Makefile
         limbo-android-lib/src/main/jni/Android.mk
         limbo-android-lib/src/main/jni/Application.mk
         limbo-android-lib/src/main/jni/android-limbo-build.mak
         limbo-android-lib/src/main/jni/android-qemu-build.mak
 
-    f. Frontend UI options configuration see: Config.java
+    f. 前端UI选项配置参见： Config.java
     
-    g. When using git apply the following setting to your config file if you want to use 
-        return new lines for windows:
+    g. 当使用git时，在配置文件中应用以下设置。如果你想使用 
+        请返回窗口的新行：
     [core]
         eol = true
         autocrlf = input
         fileMode = false
         
 ===============================================================================
-10. Run
+10. 运行
 
-    a. Installing a full Qwerty keyboard for Android like Hacker's keyboard 
-        from the Google Android store. Make sure you use Transparent theme 
-        and Direct Draw found under Theme settings.
-    b. Start the Limbo app and choose CPU, Memory (~8-64MB),etc..
-    c. Choose a bootable disk image(s) for CDRom, Floppy, and a HDD image
-    d. Start the virtual machine.
-    e. For more instructions and guides visit: 
+    a. 安装一个完整的Qwerty键盘的Android像黑客的键盘从谷歌Android商店。 
+        确保您使用透明主题和主题设置下的直接绘制。
+    b. 启动Limbo应用程序并选择CPU、内存（~8 - 64MB）等……
+    c. 为光驱、软盘和硬盘映像选择可引导磁盘映像
+    d. 启动虚拟机。
+    e. 有关更多说明和指南，请访问： 
         https://github.com/limboemu/limbo
-    f. Have fun!
+    f. 好好玩哦!
 
+==============================================================================
+11. 更新日志
+请参见 limbo-android-lib/src/main/assets/CHANGELOG for release notes
 ===============================================================================
-10. Changelog
-See limbo-android-lib/src/main/assets/CHANGELOG for release notes
+12. 许可证
 
-===============================================================================
-11. License
+Limbo PC Emulator在GPL v2许可证下发布。
+/res 下的所有图标均来自Gnome项目（GPL v2许可证）
+参见根目录下的文件COPYING
+和 limbo-android-lib/src/main/assets 下的许可证
 
-Limbo PC Emulator is released under GPL v2 License.
-All icons under /res are from Gnome Project (GPL v2 License)
-See file COPYING under root directory
-and LICENSE under limbo-android-lib/src/main/assets
-
-Other source included are released under their own license please view Licenses under each subdirectory
+包含的其他源代码是在其自己的许可证下发布的，请查看每个子目录下的许可证
